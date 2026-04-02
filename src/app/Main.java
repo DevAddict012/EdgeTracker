@@ -16,6 +16,17 @@ public class Main {
 //       addTrades();
         getAllTrades();
         deleteTrades(2);
+
+        Trade trade = new Trade(1,
+                "XAUUSD",
+                1950.5,
+                1942.0,
+                1965.0,
+                "WIN",
+                "Liquidity b",
+                LocalDate.now()
+        );
+        updateTrade(trade);
         getAllTrades();
     }
     public void testConnection()
@@ -59,5 +70,10 @@ public class Main {
         TradeDAO dao = new TradeDAO();
 
         dao.deleteTrade(id);
+    }
+    public void updateTrade(Trade trade)
+    {
+        TradeDAO dao=new TradeDAO();
+        dao.updateTrade(trade);
     }
 }

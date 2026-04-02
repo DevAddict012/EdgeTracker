@@ -15,6 +15,8 @@ public class Main {
 //        testConnection();
 //       addTrades();
         getAllTrades();
+        deleteTrades(2);
+        getAllTrades();
     }
     public void testConnection()
     {
@@ -51,5 +53,11 @@ public class Main {
             trade.toString();
             System.out.println(trade.toString());
         }
+    }
+    public void deleteTrades(int id)
+    {
+        TradeDAO dao = new TradeDAO();
+
+        dao.deleteTrade(id);
     }
 }

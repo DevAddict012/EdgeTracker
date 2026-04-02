@@ -33,6 +33,38 @@ public class TradeDAO {
             e.printStackTrace();
         }
     }
+    public Trade getTradeById(int id) {
+        String sql = "SELECT * FROM Trades WHERE id = ?";
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String pair = rs.getString("pair");
+                double entryPrice = rs.getDouble("entryPrice");
+                double stopLoss = rs.getDouble("stopLoss");
+                double takeProfit = rs.getDouble("takeProfit");
+                String result = rs.getString("result");
+                String setup = rs.getString("setup");
+                java.time.LocalDate tradeDate = rs.getDate("tradeDate").toLocalDate();
+
+                conn.close();
+
+                return new Trade(id, pair, entryPrice, stopLoss, takeProfit, result, setup, tradeDate);
+            }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
     public ArrayList<Trade> getAllTrades()
     {
         ArrayList<Trade> trades = new ArrayList<>();
@@ -63,5 +95,26 @@ public class TradeDAO {
         }
         return trades;
     }
-    
+    public void deleteTrade(int id) {
+        String sql = "DELETE FROM Trades WHERE id = ?";
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, id);
+
+           int rowsDeleted= stmt.executeUpdate();
+           if(rowsDeleted>0) {
+               System.out.println("Trade with ID: "+id+" was deleted successfully!");
+           }
+           else{
+               System.out.println("Row with id "+id+ " doesn't exist");
+           }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

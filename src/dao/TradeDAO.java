@@ -33,5 +33,35 @@ public class TradeDAO {
             e.printStackTrace();
         }
     }
+    public ArrayList<Trade> getAllTrades()
+    {
+        ArrayList<Trade> trades = new ArrayList<>();
+        String sql="SELECT * FROM Trades";
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();//query is stored in rs
+            while(rs.next())//while there's still info on the next line , retrieve it.
+            {
+                    int id = rs.getInt("id");
+                    String pair = rs.getString("pair");
+                    double entryPrice = rs.getDouble("entryPrice");
+                    double stopLoss = rs.getDouble("stopLoss");
+                    double takeProfit = rs.getDouble("takeProfit");
+                    String result = rs.getString("result");
+                    String setup = rs.getString("setup");
+                    java.time.LocalDate tradeDate = rs.getDate("tradeDate").toLocalDate();
+                    Trade trade = new Trade(id,pair,entryPrice,stopLoss,takeProfit,result,setup,tradeDate);//Turn retrieved data from DB to a Trade Object
+                    trades.add(trade);
+
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return trades;
+    }
     
 }

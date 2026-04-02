@@ -2,7 +2,8 @@ package dao;
 
 import model.Trade;
 import util.DBConnection;
-
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -32,4 +33,5 @@ public class TradeDAO {
             e.printStackTrace();
         }
     }
+    
 }

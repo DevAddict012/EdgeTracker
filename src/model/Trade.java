@@ -6,16 +6,18 @@ public class Trade {
     private int id;
     private String pair;
     private double entryPrice;
+    private String direction;
     private double stopLoss;
     private double takeProfit;
     private String result;
     private String setup;
     private LocalDate tradeDate;
 
-    public Trade(String pair, double entryPrice, double stopLoss, double takeProfit,
+    public Trade(String pair, double entryPrice, String direction,double stopLoss, double takeProfit,
                  String result, String setup, LocalDate tradeDate) {
         this.pair = pair;
         this.entryPrice = entryPrice;
+        this.direction=direction;
         this.stopLoss = stopLoss;
         this.takeProfit = takeProfit;
         this.result = result;
@@ -23,11 +25,12 @@ public class Trade {
         this.tradeDate = tradeDate;
     }
 
-    public Trade(int id, String pair, double entryPrice, double stopLoss, double takeProfit,
+    public Trade(int id, String pair, double entryPrice,String direction, double stopLoss, double takeProfit,
                  String result, String setup, LocalDate tradeDate) {
         this.id = id;
         this.pair = pair;
         this.entryPrice = entryPrice;
+        this.direction=direction;
         this.stopLoss = stopLoss;
         this.takeProfit = takeProfit;
         this.result = result;
@@ -58,7 +61,14 @@ public class Trade {
     public void setEntryPrice(double entryPrice) {
         this.entryPrice = entryPrice;
     }
-
+    public String getDirection()
+    {
+        return direction;
+    }
+    public void setDirection(String direction)
+    {
+        this.direction=direction;
+    }
     public double getStopLoss() {
         return stopLoss;
     }
@@ -104,7 +114,7 @@ public class Trade {
         return "Trade{" +
                 "id=" + id +
                 ", pair='" + pair + '\'' +
-                ", entryPrice=" + entryPrice +
+                ", entryPrice=" + entryPrice +", Direction=" +direction+
                 ", stopLoss=" + stopLoss +
                 ", takeProfit=" + takeProfit +
                 ", result='" + result + '\'' +

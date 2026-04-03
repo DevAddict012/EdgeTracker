@@ -13,13 +13,13 @@ public class Main {
     public Main()
     {
 //        testConnection();
-//       addTrades();
+         addTrades();
         getAllTrades();
-        deleteTrades(2);
+//        deleteTrades(2);
 
         Trade trade = new Trade(1,
                 "XAUUSD",
-                1950.5,
+                1950.5,"BUY",
                 1942.0,
                 1965.0,
                 "WIN",
@@ -44,7 +44,16 @@ public class Main {
     {
         Trade trade = new Trade(
                 "XAUUSD",
-                1950.5,
+                1950.5,"BUY",
+                1942.0,
+                1965.0,
+                "WIN",
+                "Liquidity Grab",
+                LocalDate.now()
+        );
+        Trade trade2 = new Trade(
+                "XAUUSD",
+                1950.5,"SELL",
                 1942.0,
                 1965.0,
                 "WIN",
@@ -54,6 +63,7 @@ public class Main {
 
         TradeDAO dao = new TradeDAO();
         dao.addTrade(trade);
+        dao.addTrade(trade2);
     }
     public void getAllTrades() {
         TradeDAO dao = new TradeDAO();

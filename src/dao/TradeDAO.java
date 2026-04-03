@@ -11,19 +11,20 @@ import java.sql.SQLException;
 public class TradeDAO {
 
     public void addTrade(Trade trade) {
-        String sql = "INSERT INTO Trades (pair, entryPrice, stopLoss, takeProfit, result, setup, tradeDate) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Trades (pair, entryPrice, direction, stopLoss, takeProfit, result, setup, tradeDate) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, trade.getPair());
             stmt.setDouble(2, trade.getEntryPrice());
-            stmt.setDouble(3, trade.getStopLoss());
-            stmt.setDouble(4, trade.getTakeProfit());
-            stmt.setString(5, trade.getResult());
-            stmt.setString(6, trade.getSetup());
-            stmt.setDate(7, java.sql.Date.valueOf(trade.getTradeDate()));
+            stmt.setString(3,trade.getDirection());
+            stmt.setDouble(4, trade.getStopLoss());
+            stmt.setDouble(5, trade.getTakeProfit());
+            stmt.setString(6, trade.getResult());
+            stmt.setString(7, trade.getSetup());
+            stmt.setDate(8, java.sql.Date.valueOf(trade.getTradeDate()));
 
             stmt.executeUpdate();
             System.out.println("Trade added successfully!");
@@ -46,6 +47,7 @@ public class TradeDAO {
             if (rs.next()) {
                 String pair = rs.getString("pair");
                 double entryPrice = rs.getDouble("entryPrice");
+                String direction= rs.getString("direction");
                 double stopLoss = rs.getDouble("stopLoss");
                 double takeProfit = rs.getDouble("takeProfit");
                 String result = rs.getString("result");
@@ -54,7 +56,7 @@ public class TradeDAO {
 
                 conn.close();
 
-                return new Trade(id, pair, entryPrice, stopLoss, takeProfit, result, setup, tradeDate);
+                return new Trade(id, pair, entryPrice,direction, stopLoss, takeProfit, result, setup, tradeDate);
             }
 
             conn.close();
@@ -79,12 +81,13 @@ public class TradeDAO {
                     int id = rs.getInt("id");
                     String pair = rs.getString("pair");
                     double entryPrice = rs.getDouble("entryPrice");
+                    String direction= rs.getString("direction");
                     double stopLoss = rs.getDouble("stopLoss");
                     double takeProfit = rs.getDouble("takeProfit");
                     String result = rs.getString("result");
                     String setup = rs.getString("setup");
                     java.time.LocalDate tradeDate = rs.getDate("tradeDate").toLocalDate();
-                    Trade trade = new Trade(id,pair,entryPrice,stopLoss,takeProfit,result,setup,tradeDate);//Turn retrieved data from DB to a Trade Object
+                    Trade trade = new Trade(id,pair,entryPrice,direction,stopLoss,takeProfit,result,setup,tradeDate);//Turn retrieved data from DB to a Trade Object
                     trades.add(trade);
 
 
@@ -118,7 +121,7 @@ public class TradeDAO {
         }
     }
     public void updateTrade(Trade trade) {
-        String sql = "UPDATE Trades SET pair = ?, entryPrice = ?, stopLoss = ?, takeProfit = ?, " +
+        String sql = "UPDATE Trades SET pair = ?, entryPrice = ?, direction = ?, stopLoss = ?, takeProfit = ?, " +
                 "result = ?, setup = ?, tradeDate = ? WHERE id = ?";
 
         try {
@@ -127,12 +130,13 @@ public class TradeDAO {
 
             stmt.setString(1, trade.getPair());
             stmt.setDouble(2, trade.getEntryPrice());
-            stmt.setDouble(3, trade.getStopLoss());
-            stmt.setDouble(4, trade.getTakeProfit());
-            stmt.setString(5, trade.getResult());
-            stmt.setString(6, trade.getSetup());
-            stmt.setDate(7, java.sql.Date.valueOf(trade.getTradeDate()));
-            stmt.setInt(8, trade.getId());
+            stmt.setString(3,trade.getDirection());
+            stmt.setDouble(4, trade.getStopLoss());
+            stmt.setDouble(5, trade.getTakeProfit());
+            stmt.setString(6, trade.getResult());
+            stmt.setString(7, trade.getSetup());
+            stmt.setDate(8, java.sql.Date.valueOf(trade.getTradeDate()));
+            stmt.setInt(9, trade.getId());
 
             int rowsAffected = stmt.executeUpdate();
 

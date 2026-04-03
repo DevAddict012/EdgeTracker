@@ -3,6 +3,7 @@ package ui;
 import dao.TradeDAO;
 import model.Trade;
 import java.time.LocalDate;
+import java.util.ArrayList;
 //Necessary imports
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -46,6 +47,7 @@ public class MainApp extends Application {
         DatePicker datePicker = new DatePicker();
 
         Button addButton = new Button("Add Trade");
+        TableView<Trade> table=TradeHistory();
         //CONNECTING THE ADD BUTTON TO ADD A TRADE IN THE DATABASE
         addButton.setOnAction(e->{
             try{
@@ -61,14 +63,15 @@ public class MainApp extends Application {
                 Trade trade =new Trade(pair,entryPrice,direction,stopLoss,takeProfit,result,setup,tradeDate);
                 TradeDAO dao=new TradeDAO();
                 dao.addTrade(trade);
+                loadTradesIntoTable(table);
             }catch(Exception ex){
                 ex.printStackTrace();
             }
 
 
         });
-        TableView<Trade> table=TradeHistory();
-        
+
+
         VBox root = new VBox(10);
         root.getChildren().addAll(
                 heading,
@@ -84,6 +87,8 @@ public class MainApp extends Application {
                 table
         );
 
+        //Load trades in the table
+        loadTradesIntoTable(table);
         Scene scene = new Scene(root, 400, 700);
 
         stage.setTitle("Edge Tracker");
@@ -117,6 +122,13 @@ public class MainApp extends Application {
 
         table.getColumns().addAll(idCol, pairCol, entryCol, directionCol,slCol,tpCol,resultCol,setupCol,dateCol);
         return table;
+    }
+    private void loadTradesIntoTable(TableView<Trade> table) {
+        TradeDAO dao = new TradeDAO();
+        ArrayList<Trade> trades = dao.getAllTrades();
+
+        table.getItems().clear();
+        table.getItems().addAll(trades);
     }
 
     public static void main(String[] args) {

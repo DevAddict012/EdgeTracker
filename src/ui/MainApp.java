@@ -1,6 +1,9 @@
 package ui;
 //IMPORT THE BACKEND CLASSES
-
+import dao.TradeDAO;
+import model.Trade;
+import java.time.LocalDate;
+//Necessary imports
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -23,8 +26,8 @@ public class MainApp extends Application {
         TextField entryField = new TextField();
 
         Label directionLabel = new Label("Direction:");
-        ComboBox<String> directionField = new ComboBox<>();
-        directionField.getItems().addAll("BUY","SELL");
+        ComboBox<String> directionBox = new ComboBox<>();
+        directionBox.getItems().addAll("BUY","SELL");
 
         Label stopLossLabel = new Label("Stop Loss:");
         TextField stopLossField = new TextField();
@@ -37,23 +40,39 @@ public class MainApp extends Application {
         resultBox.getItems().addAll("WIN", "LOSS");
 
         Label setupLabel = new Label("Setup:");
-        TextField setup=new TextField();
+        TextField setupField=new TextField();
 
         Label dateLabel = new Label("Trade Date:");
         DatePicker datePicker = new DatePicker();
 
         Button addButton = new Button("Add Trade");
+        //CONNECTING THE ADD BUTTON TO ADD A TRADE IN THE DATABASE
+        addButton.setOnAction(e->{
+            try{
+                String pair = pairField.getText();
+                double entryPrice = Double.parseDouble(entryField.getText());
+                String direction = directionBox.getValue();
+                double stopLoss = Double.parseDouble(stopLossField.getText());
+                double takeProfit = Double.parseDouble(takeProfitField.getText());
+                String result = resultBox.getValue();
+                String setup = setupField.getText();
+                LocalDate tradeDate = datePicker.getValue();
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
 
+
+        });
         VBox root = new VBox(10);
         root.getChildren().addAll(
                 heading,
                 pairLabel, pairField,
                 entryLabel, entryField,
-                directionLabel,directionField,
+                directionLabel,directionBox,
                 stopLossLabel, stopLossField,
                 takeProfitLabel, takeProfitField,
                 resultLabel, resultBox,
-                setupLabel, setup,
+                setupLabel, setupField,
                 dateLabel, datePicker,
                 addButton
         );

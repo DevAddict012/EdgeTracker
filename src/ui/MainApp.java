@@ -57,12 +57,18 @@ public class MainApp extends Application {
                 String result = resultBox.getValue();
                 String setup = setupField.getText();
                 LocalDate tradeDate = datePicker.getValue();
+
+                Trade trade =new Trade(pair,entryPrice,direction,stopLoss,takeProfit,result,setup,tradeDate);
+                TradeDAO dao=new TradeDAO();
+                dao.addTrade(trade);
             }catch(Exception ex){
                 ex.printStackTrace();
             }
 
 
         });
+        TableView<Trade> table=TradeHistory();
+        
         VBox root = new VBox(10);
         root.getChildren().addAll(
                 heading,
@@ -74,7 +80,8 @@ public class MainApp extends Application {
                 resultLabel, resultBox,
                 setupLabel, setupField,
                 dateLabel, datePicker,
-                addButton
+                addButton,
+                table
         );
 
         Scene scene = new Scene(root, 400, 700);
@@ -82,6 +89,34 @@ public class MainApp extends Application {
         stage.setTitle("Edge Tracker");
         stage.setScene(scene);
         stage.show();
+    }
+    private TableView<Trade> TradeHistory()
+    {
+        TableView<Trade> table = new TableView<>();
+        //INITIALISE TABLE
+        TableColumn<Trade, Integer> idCol = new TableColumn<>("ID");
+        TableColumn<Trade, String> pairCol = new TableColumn<>("Pair");
+        TableColumn<Trade, String> directionCol = new TableColumn<>("Direction");
+        TableColumn<Trade, Double> entryCol = new TableColumn<>("Entry");
+        TableColumn<Trade, Double> slCol = new TableColumn<>("Stop Loss");
+        TableColumn<Trade, Double> tpCol = new TableColumn<>("Take Profit");
+        TableColumn<Trade, String> resultCol = new TableColumn<>("Result");
+        TableColumn<Trade, String> setupCol = new TableColumn<>("Setup");
+        TableColumn<Trade, LocalDate> dateCol = new TableColumn<>("Date");
+
+        //SET COLUMNS
+        idCol.setCellValueFactory(data-> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getId()).asObject());
+        pairCol.setCellValueFactory(data-> new javafx.beans.property.SimpleStringProperty(data.getValue().getPair()));
+        directionCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDirection()));
+        entryCol.setCellValueFactory(data -> new javafx.beans.property.SimpleDoubleProperty(data.getValue().getEntryPrice()).asObject());
+        slCol.setCellValueFactory(data -> new javafx.beans.property.SimpleDoubleProperty(data.getValue().getStopLoss()).asObject());
+        tpCol.setCellValueFactory(data -> new javafx.beans.property.SimpleDoubleProperty(data.getValue().getTakeProfit()).asObject());
+        resultCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getResult()));
+        setupCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getSetup()));
+        dateCol.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getTradeDate()));
+
+        table.getColumns().addAll(idCol, pairCol, entryCol, directionCol,slCol,tpCol,resultCol,setupCol,dateCol);
+        return table;
     }
 
     public static void main(String[] args) {
